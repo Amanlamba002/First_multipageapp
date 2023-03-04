@@ -1,5 +1,7 @@
 import streamlit as st
 from matplotlib import image
+import pandas as pd
+import plotly.express as px
 import os
 
 st.title("Dashboard - Titanic Data")
@@ -16,3 +18,15 @@ DATA_PATH = os.path.join(dir_of_interest, "data", "titanic.csv")
 
 img = image.imread(IMAGE_PATH)
 st.image(img)
+df = pd.read_csv(DATA_PATH)
+st.dataframe(df)
+Survived = st.selectbox("Select the Carbrand:", df['sex'].unique())
+
+col1, col2 = st.columns(2)
+
+
+fig_1 = px.scatter(df[df['survived'] == Survived], x="alive")
+col1.plotly_chart(fig_1, use_container_width=True)
+
+fig_2 = px.box(df[df['survived'] ==Survived],y='alive')
+col2.plotly_chart(fig_2, use_container_width=True)
